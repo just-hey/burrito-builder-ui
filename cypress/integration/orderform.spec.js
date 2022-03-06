@@ -17,5 +17,41 @@ describe('App', () => {
       })
     cy.visit('http://localhost:3000')
   })
+
+  it('should allow a user to enter their name for the order', () => {
+    cy.get('input[name="name"]')
+      .should('have.value', '')
+    cy.get('input[name="name"]')
+      .type('Bob')
+      .should('have.value', 'Bob')
+  })
+
+  it('should allow a user to select ingredients for their burrito', () => {
+    cy.get('form')
+      .find('p')
+      .should('have.text', 'Order: Nothing selected')
+    cy.get('button')
+      .contains('guacamole')
+      .click()
+    cy.get('form').find('p')
+      .should('have.text', 'Order: guacamole')
+  })
+
+  it('should allow a user to submit their order if the inputs are filled out', () => {
+    cy.get('input[name="name"]')
+      .type('Bob')
+      .should('have.value', 'Bob')
+    cy.get('button')
+      .contains('beans')
+      .click()
+    cy.get('button')
+      .contains('Submit Order')
+      .click()
+    cy.wait('@post')
+      .its('response.body')
+      .then(({orders}) => {
+      cy.expect(orders[0].name).to.deep.equal('Bob')
+    })
+  })
   
 })

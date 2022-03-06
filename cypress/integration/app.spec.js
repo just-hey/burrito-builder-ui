@@ -9,8 +9,9 @@ describe('App', () => {
       .should('contain','Burrito Builder')
   })
 
-  it('should allow a user to see a gallery of created orders on load', () => {
-    cy.get('.order').contains('Pat')
+  it('should allow a user to see prepopulted orders on render', () => {
+    cy.get('.order')
+      .contains('Pat')
   })
   
 })
